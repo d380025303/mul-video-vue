@@ -10,7 +10,7 @@ module.exports = {
         hotOnly: false,
         proxy: { // 设置代理
             '/daixinmini': {
-                target: 'http://localhost:8080/',
+                target: 'http://localhost:10001/',
                 changeOrigin: true,
                 ws: true
             }
