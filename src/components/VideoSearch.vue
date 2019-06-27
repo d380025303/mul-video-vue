@@ -4,8 +4,8 @@
             <el-col >
                 <el-input placeholder="请输入内容" v-on:keyup.native="handleSearch" v-model="data.searchContent" class="input-with-select">
                     <el-select v-model.lazy:value="data.type" change="typeChange" no-data-text="请选择" slot="prepend" placeholder="请选择">
-                        <el-option label="腾讯" value="qq"></el-option>
-                        <el-option disabled label="爱奇艺" value="aqiyi"></el-option>
+                        <el-option disabled label="腾讯" value="qq"></el-option>
+                        <el-option label="爱奇艺" value="iqiyi"></el-option>
                         <el-option label="优酷" value="youku"></el-option>
                     </el-select>
                     <el-button slot="append" autofocus v-on:click="handleSearch" icon="el-icon-search"></el-button>
@@ -15,7 +15,7 @@
         <el-row :gutter="10">
             <el-col class="mb20" v-for="searchVo in searchVoList" :key="searchVo.url">
                 <el-card>
-                    <div v-on:click="handleMovie(searchVo.url)" class="dm-search-card-contain">
+                    <div v-on:click="handleMovie(searchVo.url, searchVo.movieVoList)" class="dm-search-card-contain">
                         <div >
                             {{searchVo.name}}
                         </div>
@@ -31,12 +31,13 @@
 </template>
 
 <script>
+    import _ from 'lodash';
     export default {
         name: "VideoSearch",
         data() {
             return {
                 data: {
-                    type: 'qq',
+                    type: 'iqiyi',
                     searchContent: '',
                 },
                 searchVoList: []
@@ -46,18 +47,20 @@
             handleSearch: function () {
                 const that = this;
                 const { type , searchContent } = that.data;
-                this.axios.post('/daixinmini/video/searchList', { type, content: searchContent }).then(function (result) {
-                    that.searchVoList = result.data.searchVoList;
-                });
-
+                if (!_.isEmpty(searchContent)) {
+                    this.axios.post('/daixinmini/video/searchList', { type, content: searchContent }).then(function (result) {
+                        that.searchVoList = result.data.searchVoList;
+                    });
+                }
             },
-            handleMovie: function (url) {
+            handleMovie: function (url, movieVoList) {
                 const that = this;
                 that.$router.push({
                     name: 'VideoMovie',
                     params: {
                         url,
-                        type: that.data.type
+                        type: that.data.type,
+                        movieVoList
                     }
                 });
             }
@@ -82,7 +85,7 @@
 
 <style >
     .el-select {
-        min-width: 60px;
+        min-width: 100px;
     }
     .dm-search-card-contain {
         display: flex;
