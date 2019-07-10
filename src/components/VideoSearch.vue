@@ -4,7 +4,7 @@
             <el-col >
                 <el-input placeholder="请输入内容" v-on:keyup.native="handleSearch" v-model="data.searchContent" class="input-with-select">
                     <el-select v-model.lazy:value="data.type" change="typeChange" no-data-text="请选择" slot="prepend" placeholder="请选择">
-                        <el-option disabled label="腾讯" value="qq"></el-option>
+                        <el-option label="腾讯" value="qq"></el-option>
                         <el-option label="爱奇艺" value="iqiyi"></el-option>
                         <el-option label="优酷" value="youku"></el-option>
                     </el-select>

@@ -6,12 +6,12 @@
           class="wid100"
           v-on:change="handleParseUrlChange(selectParseUrl)"
           v-model="selectParseUrl"
-          value-key="id"
+          value-key="seqNo"
           placeholder="请选择"
         >
           <el-option
             v-for="parseUrlVo in parseUrlVoList"
-            :key="parseUrlVo.id"
+            :key="parseUrlVo.seqNo"
             :label="parseUrlVo.name"
             :value="parseUrlVo"
           >
@@ -63,7 +63,6 @@ export default {
         this.axios
           .post("/daixinmini/video/movieList", { url, type })
           .then(function(result) {
-            console.log(result);
             that.movieVoList = result.data;
           });
       }
@@ -81,9 +80,17 @@ export default {
       const that = this;
       let baseUrl = that.selectParseUrl.url;
       that.nowSrc = baseUrl.replace(/"/g, "") + url;
+      if (that.timeout) {
+        clearTimeout(that.timeout);
+      }
+      that.timeout = setTimeout(function() {
+        that.axios.post("/daixinmini/videoparse/addhotnum", {
+            ...that.selectParseUrl
+        });
+      }, 60000);
     },
     handleParseUrlChange: function(selectParseUrl) {
-        that.selectParseUrl = selectParseUrl;
+      that.selectParseUrl = selectParseUrl;
     }
   },
   created: function() {
