@@ -9,3 +9,6 @@ yarn run serve
 ```
 yarn run build
 ```
+
+# demo地址
+http://video.daixinmini.com/
